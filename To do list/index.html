@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List App</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+<body>
+    <div class="container">  
+        <h1 class="header">Todo App</h1>
+        <div class="add-new-task">
+            <input @keyup.enter="addTodo" type="text" placeholder="Add your new todo" class="input-todo" v-model="newTodo">
+            <button @click="addTodo" class="submit-new-task"><i class="fas fa-plus"></i></button>
+        </div>
+        
+        <ul class="todolist">
+           <li v-for="(todo,index) in todos" :key="index">
+            {{ todo }} <span @click="removeTodo(index)"><i class="fa fa-trash" aria-hidden="true"></i></span>
+           </li>  
+        </ul>
+        <div class="pending">
+            <span>You have <span>{{ pendingTasks }}</span> pending tasks</span>
+            <button @click="clearAll">Clear All</button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    newTodo: '',
+                    todos: [
+                        'Buy a new gaming laptop',
+                        'Complete a previous task',
+                        'Create a video for Youtube',
+                        'Create a new portfolio site'
+                    ]
+                };
+            },
+            methods: {
+                addTodo() {
+                    this.todos.push(this.newTodo);
+                    this.newTodo = '';
+                },
+                removeTodo(index) {
+                    this.todos.splice(index, 1);
+                },
+                clearAll() {
+                    this.todos = [];
+                }
+            },
+            computed: {
+                pendingTasks() {
+                    return this.todos.length;
+                }
+            }
+        });
+
+        app.mount('.container');
+    </script>
+</body>
+</html>

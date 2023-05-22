@@ -17,8 +17,10 @@
         </div>
         
         <ul class="todolist">
-           <li v-for="(todo,index) in todos" :key="index">
-            {{ todo }} <span @click="removeTodo(index)"><i class="fa fa-trash" aria-hidden="true"></i></span>
+           <li v-for="(todo, index) in todos" :key="index">
+            <input type="checkbox" v-model="todo.completed">
+            <span>{{ todo.task }}</span> 
+            {{todo.task}}<span @click="removeTodo(index)"><i class="fa fa-trash" aria-hidden="true"></i></span>
            </li>  
         </ul>
         <div class="pending">
@@ -34,17 +36,19 @@
                 return {
                     newTodo: '',
                     todos: [
-                        'Buy a new gaming laptop',
-                        'Complete a previous task',
-                        'Create a video for Youtube',
-                        'Create a new portfolio site'
+                        { task: 'Buy a new gaming laptop', completed: false },
+                        { task: 'Complete a previous task', completed: false },
+                        { task: 'Create a video for Youtube', completed: false },
+                        { task: 'Create a new portfolio site', completed: false }
                     ]
                 };
             },
             methods: {
                 addTodo() {
-                    this.todos.push(this.newTodo);
-                    this.newTodo = '';
+                    if (this.newTodo.trim() !== '') {
+                        this.todos.push({ task: this.newTodo, completed: false });
+                        this.newTodo = '';
+                    }
                 },
                 removeTodo(index) {
                     this.todos.splice(index, 1);
@@ -55,7 +59,7 @@
             },
             computed: {
                 pendingTasks() {
-                    return this.todos.length;
+                    return this.todos.filter(todo => !todo.completed).length;
                 }
             }
         });
